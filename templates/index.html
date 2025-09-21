@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhishGuard - Advanced ML-powered phishing URL detection">
+    <meta name="keywords" content="phishing url, cybersecurity, url checker, machine learning, security">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <title>PhishGuard - Advanced Phishing Detection</title>
+</head>
+
+<body>
+    <!-- Enhanced modern UI with cybersecurity theme -->
+    <div class="cyber-bg"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>PhishGuard</span>
+            </div>
+            <nav class="nav">
+                <a href="#scanner">Scanner</a>
+                <a href="#features">Features</a>
+                <a href="#stats">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="scanner">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <i class="fas fa-shield-virus"></i>
+                        Advanced Phishing Detection
+                    </h1>
+                    <p class="hero-subtitle">
+                        Powered by Machine Learning • 97%+ Accuracy • 30+ Security Features
+                    </p>
+                    
+                    <!-- URL Scanner -->
+                    <div class="scanner-box">
+                        <form action="/" method="post" class="scanner-form" id="scanForm">
+                            <div class="input-group">
+                                <i class="fas fa-link input-icon"></i>
+                                <input 
+                                    type="url" 
+                                    class="url-input" 
+                                    name="url" 
+                                    id="urlInput" 
+                                    placeholder="Enter website URL to analyze..." 
+                                    required 
+                                />
+                                <button type="submit" class="scan-btn" id="scanBtn">
+                                    <i class="fas fa-search"></i>
+                                    <span>Analyze URL</span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Loading State -->
+                        <div class="loading-state" id="loadingState" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <p>Analyzing URL security features...</p>
+                        </div>
+                        
+                        <!-- Results -->
+                        {% if result %}
+                        <div class="result-container" id="resultContainer">
+                            <div class="result-header">
+                                <div class="url-info">
+                                    <i class="fas fa-globe"></i>
+                                    <a href="{{ url }}" target="_blank" rel="noopener">{{ url }}</a>
+                                </div>
+                            </div>
+                            
+                            <div class="result-content">
+                                <div class="threat-level {% if risk_level == 'low' %}safe{% else %}danger{% endif %}" id="threatLevel">
+                                    <div class="threat-icon" id="threatIcon">
+                                        {% if risk_level == 'low' %}
+                                        <i class="fas fa-shield-check"></i>
+                                        {% else %}
+                                        <i class="fas fa-shield-exclamation"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="threat-info">
+                                        <h3 id="threatTitle">{{ result }}</h3>
+                                        <p id="threatDescription">
+                                            {% if risk_level == 'low' %}
+                                            This URL passed security checks and appears legitimate.
+                                            {% else %}
+                                            This URL shows risk indicators. Exercise extreme caution.
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="confidence-score" id="confidenceScore">
+                                        <span class="score-value" id="scoreValue">
+                                            {% if safe_prob %}{{ safe_prob|round|int }}%{% else %}--{% endif %}
+                                        </span>
+                                        <span class="score-label">Confidence</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="action-buttons">
+                                    {% if risk_level == 'low' %}
+                                    <button class="btn-safe" onclick="window.open('{{ url }}', '_blank')">
+                                        <i class="fas fa-check-circle"></i>
+                                        Visit Website
+                                    </button>
+                                    {% else %}
+                                    <button class="btn-warning" onclick="window.open('{{ url }}', '_blank')">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Proceed with Caution
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <h2 class="section-title">Advanced Security Analysis</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>ML-Powered Detection</h3>
+                        <p>Gradient Boosting algorithm trained on 11,000+ URLs with 97% accuracy</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>30+ Security Features</h3>
+                        <p>Comprehensive analysis including domain age, SSL, redirects, and more</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Real-time Analysis</h3>
+                        <p>Instant URL scanning with detailed security assessment</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <h3>Privacy First</h3>
+                        <p>No data logging, client-side storage, complete privacy protection</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section" id="stats">
+            <div class="container">
+                <h2 class="section-title">Security Analytics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">97%</div>
+                        <div class="stat-label">Detection Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">Security Features</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">11K+</div>
+                        <div class="stat-label">Training URLs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">&lt;2s</div>
+                        <div class="stat-label">Analysis Time</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 PhishGuard. Advanced ML-powered phishing detection.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Form submission handling
+        document.getElementById('scanForm').addEventListener('submit', function(e) {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('scanBtn').disabled = true;
+        });
+        
+        // URL input validation
+        document.getElementById('urlInput').addEventListener('input', function(e) {
+            const url = e.target.value;
+            const btn = document.getElementById('scanBtn');
+            
+            if (url && (url.startsWith('http://') || url.startsWith('https://') || url.includes('.'))) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        });
+        
+        // Hide loading state if results are present
+        {% if result %}
+        document.getElementById('loadingState').style.display = 'none';
+        {% endif %}
+    </script>
+</body>
+</html>
